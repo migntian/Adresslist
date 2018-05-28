@@ -5,7 +5,7 @@
 #include <memory.h>
 #include <malloc.h>
 
-#define MAX 2
+#define MAX 3
 #define NAME_LENGTH 20
 #define SEX_LENGTH 5
 #define AGE_LENGTH 3
@@ -30,7 +30,7 @@ enum op
 {
     EXIT,
     ADD,
-    DELE,
+    ERASE,
     CLEAR,
     FID,
     MODIFY,

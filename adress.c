@@ -9,6 +9,7 @@ void menu()
     printf("          4.查找联系人\n");
     printf("          5.修改联系人\n");
     printf("          6.显示所有联系人\n");
+    printf("          7.排序联系人\n");
     printf("          0.退出\n");
     printf("==============================\n");
 
@@ -38,7 +39,7 @@ int add_contacts(contacts *men)
 {
     if(men == NULL)
     {
-        return;
+        return -1;
     }
     if(men->user_count == men->capacity)
     {
@@ -72,6 +73,26 @@ int add_contacts(contacts *men)
         return 1;
     }
 }
+int erase_contacts(contacts *men)
+{
+    if( men == NULL )
+    {
+        return -1;
+    }
+    int i = 0;
+    int ret = _find(men);
+    if(ret == -1)
+    {
+        return -1;
+    }
+    for(i = ret;i < men->user_count-1;i++)
+    {
+        men->person[i] = men->person[i+1];
+    }
+    printf("删除成功！\n");
+    men->user_count--;
+    return 1;
+}
 void show_contacts(contacts *men)
 {
     int i = 0;
@@ -84,11 +105,87 @@ void show_contacts(contacts *men)
     printf("\n");
 }
 
-//int find_contacts(contacts *men);
-//int erase_contacts(contacts *men);
-//int clear_contacts(contacts *men);
-//int remove_contacts(contacts *men);
-//void sort_contacts(contacts *men);
+int clear_contacts(contacts *men)
+{
+    if(men == NULL)
+    {
+        return -1;
+    }
+    men->user_count = 0;
+    printf("清空成功！\n");
+    return 1;
+}
+
+int find_contacts(contacts *men)
+{
+    if(men == NULL)
+    {
+        return -1;
+    }
+    int ret = _find(men);
+    if(ret == -1)
+    {
+        printf("找不到该联系人\n");
+        return -1;
+    }
+    printf("该联系人的信息为：\n");
+    printf("姓名:%-5s\n",men->person[ret].name);
+    printf("性别:%-5s\n",men->person[ret].sex);
+    printf("年龄:%-5s\n",men->person[ret].age);
+    printf("电话:%-5s\n",men->person[ret].tele);
+    printf("地址:%-5s\n",men->person[ret].addr);
+    return 1;
+}
+int remove_contacts(contacts *men)
+{
+    if(men == NULL)
+    {
+        return -1;
+    }
+    int ret = _find(men);
+    if(ret == -1)
+    {
+        printf("该用户不存在\n");
+        return -1;
+    }
+    printf("请重新输入该联系人信息\n");
+    printf("请输入名字:");
+    scanf("%s",men->person[ret].name);
+    printf("请输入性别:");
+    scanf("%s",men->person[ret].sex);
+    printf("请输入年龄:");
+    scanf("%s",men->person[ret].age);
+    printf("请输入电话:");
+    scanf("%s",men->person[ret].tele);
+    printf("请输入地址:");
+    scanf("%s",men->person[ret].addr);
+    printf("修改成功！\n");
+    return 1;
+
+}
+void sort_contacts(contacts *men)
+{
+    if(men == NULL)
+    {
+        return;
+    }
+    int i = 0;
+    int j = 0;
+    for(i = 0;i < men->user_count-1;i++)
+    {
+        for(j = 0;j < men->user_count-1;j++)
+        {
+            if((strcmp(men->person[j].name,men->person[j+1].name)) > 0)
+            {
+                user tmp = men->person[j];
+                men->person[j] = men->person[j+1];
+                men->person[j+1] = tmp;
+            }
+        }
+    }
+    printf("排序完成！\n");
+}
+
 //void check(contacts *men);
 //void testadd()
 //{
@@ -127,10 +224,41 @@ int main()
             {
             case ADD:
                 add_contacts(&user);
+                menu();
+                break;
+            case ERASE:
+                erase_contacts(&user);
+                menu();
+                break;
+            case CLEAR:
+                clear_contacts(&user);
+                menu();
+                break;
+            case FID:
+                find_contacts(&user);
+                menu();
+                break;
+            case MODIFY:
+                remove_contacts(&user);
+                menu();
+                break;
+            case SHOW:
                 show_contacts(&user);
                 menu();
                 break;
+            case SORT:
+                sort_contacts(&user);
+                show_contacts(&user);
+                menu();
+                break;
+            case EXIT:
+                printf("谢谢使用，再见!\n");
+                break;
+            dafault:
+                printf("输入错误，请重新输入\n");
+                break;
             }
+            
         }
 
     }
